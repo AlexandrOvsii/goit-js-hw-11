@@ -34,8 +34,10 @@ async function onFormSubmit(evt) {
     return;
   }
 
-  const galleryItems = await loadGallery();
+  const responseData = await loadGallery();
+  const galleryItems = responseData.galleryItems;
   gallery.innerHTML = galleryItems;
+  Notiflix.Notify.success(`Hooray! We found ${responseData.totalHits} images.`);
   loadMoreBtn.classList.remove('hidden');
   lightbox.refresh();
 }
@@ -76,12 +78,12 @@ async function loadGallery() {
         Notiflix.Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
-      } 
+      }
 
       //формируем карточки галереи
       const array = response.data.hits;
-      if (array === []) {
-        return array;
+      if (array.length === 0) {
+        return { galleryItems: [], totalHits: 0 };
       }
       console.log(array);
       const galleryItems = array
@@ -110,7 +112,7 @@ async function loadGallery() {
         )
         .join('');
 
-      return galleryItems;
+      return { galleryItems, totalHits: response.data.totalHits };
     }
   } catch (err) {
     console.error(err);
