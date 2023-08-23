@@ -45,7 +45,8 @@ async function onFormSubmit(evt) {
 async function onLoadMore() {
   page += 1;
   loadMoreBtn.classList.add('hidden');
-  const galleryItems = await loadGallery();
+  const responseData = await loadGallery();
+  const galleryItems = responseData.galleryItems;
   console.log(galleryItems);
   if (galleryItems === '') {
     loadMoreBtn.classList.add('hidden');
@@ -78,7 +79,7 @@ async function loadGallery() {
         Notiflix.Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
-      }
+      } 
 
       //формируем карточки галереи
       const array = response.data.hits;
