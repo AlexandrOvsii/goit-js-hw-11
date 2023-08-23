@@ -36,7 +36,11 @@ async function onFormSubmit(evt) {
 
   const responseData = await loadGallery();
   const galleryItems = responseData.galleryItems;
-  
+  console.log(responseData.galleryItems)
+
+  if(responseData.galleryItems === ''){
+    return
+  }
   gallery.innerHTML = galleryItems;
   Notiflix.Notify.success(`Hooray! We found ${responseData.totalHits} images.`);
   loadMoreBtn.classList.remove('hidden');
@@ -76,15 +80,12 @@ async function loadGallery() {
       );
       loadMoreBtn.classList.add('hidden');
       gallery.innerHTML = '';
-
+      return { galleryItems: [], totalHits: 0 };
     } else {
       //проверяем конец галереи
-      console.log('hitsCount:', hitsCount);
-      console.log('totalHits:', response.data.totalHits);
       hitsCount += response.data.hits.length;
       
       if (hitsCount >= response.data.totalHits) {
-        console.log("End of search results");
         Notiflix.Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
