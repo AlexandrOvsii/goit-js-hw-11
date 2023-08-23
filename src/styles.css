@@ -1,0 +1,59 @@
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.gallery {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.photo-card {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: aliceblue;
+}
+
+.img {
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+}
+
+.info {
+  font-size: 14px;
+  text-decoration: none;
+  padding-left: 10px;
+  color: black;
+}
+
+.photo-card:is(:hover, :focus) {
+  box-shadow: 0px 1px 6px rgba(46, 47, 66, 0.08),
+    0px 1px 1px rgba(46, 47, 66, 0.16), 0px 2px 1px rgba(46, 47, 66, 0.08);
+}
+
+.photo-card {
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  background-color: aliceblue;
+  align-items: center;
+  margin: 0px auto;
+  padding: 20px;
+}
+
+.load-more {
+  display: flex;
+  margin: 0 auto;
+}
+
+/* .btn-wrap{
+  background-color: aliceblue;
+  padding: 10px;
+} */
