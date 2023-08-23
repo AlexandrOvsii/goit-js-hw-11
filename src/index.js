@@ -5,7 +5,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '38931559-3de63a2d0d8ddd98ab89e5873';
-const BASE_OPTIONS = `key=${API_KEY}&image_type=photo&orientation=horizontal&safesearch=true&per_page=200`;
+const BASE_OPTIONS = `key=${API_KEY}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40`;
 
 const formSearch = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
@@ -36,6 +36,7 @@ async function onFormSubmit(evt) {
 
   const responseData = await loadGallery();
   const galleryItems = responseData.galleryItems;
+  
   gallery.innerHTML = galleryItems;
   Notiflix.Notify.success(`Hooray! We found ${responseData.totalHits} images.`);
   loadMoreBtn.classList.remove('hidden');
@@ -44,13 +45,15 @@ async function onFormSubmit(evt) {
 
 async function onLoadMore() {
   page += 1;
+
   loadMoreBtn.classList.add('hidden');
   const responseData = await loadGallery();
   const galleryItems = responseData.galleryItems;
   console.log(galleryItems);
-  if (galleryItems === '') {
+
+  if (galleryItems.length === 0) {
     loadMoreBtn.classList.add('hidden');
-    Notiflix.Notify.failure('TEST');
+    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
   } else {
     gallery.insertAdjacentHTML('beforeend', galleryItems);
     loadMoreBtn.classList.remove('hidden');
@@ -66,20 +69,27 @@ async function loadGallery() {
     );
     console.log(response);
 
-    if (response.data.totalHits === []) {
+    if (response.data.totalHits === 0) {
       //обрабатываем пустой ответ
       Notiflix.Notify.failure(
         `Sorry, there are no images matching your search query. Please try again.`
       );
       loadMoreBtn.classList.add('hidden');
+      gallery.innerHTML = '';
+
     } else {
       //проверяем конец галереи
+      console.log('hitsCount:', hitsCount);
+      console.log('totalHits:', response.data.totalHits);
       hitsCount += response.data.hits.length;
+      
       if (hitsCount >= response.data.totalHits) {
+        console.log("End of search results");
         Notiflix.Notify.failure(
           "We're sorry, but you've reached the end of search results."
         );
-      } 
+        loadMoreBtn.classList.add('hidden');
+      }
 
       //формируем карточки галереи
       const array = response.data.hits;
